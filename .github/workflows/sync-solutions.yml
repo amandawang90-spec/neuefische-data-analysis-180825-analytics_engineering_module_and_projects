@@ -1,0 +1,160 @@
+name: Sync Exercise and Solution Notebooks
+
+on:
+  pull_request:
+    branches:
+      - staging
+    types:
+      - closed
+
+jobs:
+  update_notebooks:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install nbconvert jupyter nbformat
+
+    - name: Install dependencies
+      run: pip install nbformat
+
+    - name: ✅ Validate Jupyter notebooks
+      run: |
+        python -c "
+        import nbformat
+        import sys
+        import glob
+
+        corrupted = []
+        for nb_file in glob.glob('**/*.ipynb', recursive=True):
+            try:
+                with open(nb_file, 'r', encoding='utf-8') as f:
+                    nbformat.read(f, as_version=4)
+            except Exception as e:
+                print(f'Error in notebook {nb_file}: {e}')
+                corrupted.append(nb_file)
+
+        if corrupted:
+            print('\n❌ Found corrupted notebooks:')
+            for nb in corrupted:
+                print(f' - {nb}')
+            sys.exit(1)
+        else:
+            print('\n✅ All notebooks are valid.')
+        "
+    
+    - name: Check for merge conflicts in notebooks
+      id: conflict_check
+      run: |
+        CONFLICTS=$(grep -lrE '<<<<<<<|=======|>>>>>>>' --include \*.ipynb . || true)
+        echo "conflicts=$CONFLICTS" >> $GITHUB_OUTPUT
+        if [ -n "$CONFLICTS" ]; then
+          echo "Merge conflicts found in notebooks:"
+          echo "$CONFLICTS"
+          exit 1
+        else
+          echo "No merge conflicts found."
+        fi
+
+    - name: Comment on PR if conflicts found
+      if: failure() && github.event_name == 'pull_request'
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          ⚠️ **Merge conflicts detected in Jupyter notebooks!**
+
+          Please resolve conflicts by removing merge markers (`<<<<<<<`, `=======`, `>>>>>>>`) inside the affected notebook files. See the [CONTRIBUTING.md](./CONTRIBUTING.md#handling-merge-conflicts-in-jupyter-notebooks) for detailed instructions.
+
+          The workflow has stopped until these conflicts are fixed.
+
+    - name: Commit and push changes to the solution branch
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git checkout solutions
+        if [ "$(git rev-parse staging)" != "$(git rev-parse solutions)" ]; then
+          git merge staging
+        else
+          echo "No changes to merge from staging to solutions."
+        fi
+        if [ -n "$(git status --porcelain)" ]; then
+          git add .
+          git commit -m "Update solutions branch"
+        else
+          echo "No changes to commit for solutions."
+        fi
+        git push origin solutions || echo "Nothing to push to solutions branch."
+
+    - name: Prepare temp branch for main updates
+      run: |
+        git checkout -b temp-merge
+        if [ "$(git rev-parse staging)" != "$(git rev-parse temp-merge)" ]; then
+          git merge staging
+        else
+          echo "No changes to merge from staging to temp-merge."
+        fi
+        if [ "$(find . -name 'teachers_*.ipynb' | wc -l)" -gt 0 ]; then
+          find . -name 'teachers_*.ipynb' -exec git rm --cached {} +
+        fi
+        git clean -f -X -e "*.ipynb"
+        git add .
+        if [ -n "$(git status --porcelain)" ]; then
+          git commit -m "Prepare main branch without teacher notebooks"
+        else
+          echo "No changes to commit for temp-merge."
+        fi
+        # 🚫 Remove excluded folders
+        EXCLUDED_FOLDERS=("01_intro_analytical_engineering/teachers")
+
+        for folder in "${EXCLUDED_FOLDERS[@]}"; do
+          if [ -d "$folder" ]; then
+            echo "🚫 Removing excluded folder: $folder"
+            git rm -r --cached "$folder"
+          else
+            echo "ℹ️ Folder not found: $folder (skipped)"
+          fi
+        done
+
+
+    - name: Process Notebooks - Strip Solutions
+      run: |
+        python scripts/strip_solutions.py || {
+          echo "\u274c Failed to parse notebook. Possibly malformed JSON."
+          exit 1
+        }
+
+    - name: Commit and push changes to main branch after stripping solutions
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add $(git ls-files '*.ipynb' ':!teachers_*.ipynb')
+        if [ -n "$(git status --porcelain)" ]; then
+          git commit -m "Update main branch with exercises ws"
+        else
+          echo "No changes to commit after stripping solutions."
+        fi
+        git push origin main || echo "Nothing to push to main branch."
+
+    - name: Merge temp-merge into main
+      run: |
+        git checkout main
+        git merge temp-merge || {
+          echo "\u26a0\ufe0f Merge conflict detected. Aborting."
+          git merge --abort
+          exit 1
+        }
+        git push origin main || echo "Nothing to push to main branch."
