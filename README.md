@@ -37,8 +37,7 @@ By the end of this module, you will be able to:
 - **Day 5**: dbt Marts 
 - **Day 6**: Exercise & Recap 
 - **Day 7**: Project Intro & Work
-- **Day 8**: Project Work 
-- **Day 9**: Project Work + Lightning Talks
+
 
 ## Tips for Success 💡:
 - Practice creating simple SQL queries and writing Python scripts to interact with APIs.
