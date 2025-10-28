@@ -1,0 +1,197 @@
+[
+    {
+        "type": "stop",
+        "id": "900013101",
+        "name": "U Moritzplatz (Berlin)",
+        "location": {
+            "type": "location",
+            "id": "900013101",
+            "latitude": 52.503737,
+            "longitude": 13.410944
+        },
+        "products": {
+            "suburban": false,
+            "subway": true,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:11000:900013101"
+    },
+    {
+        "type": "location",
+        "id": null,
+        "latitude": 51.630902,
+        "longitude": 13.707004,
+        "address": "Moritzplatz, 03238 Finsterwalde"
+    },
+    {
+        "type": "stop",
+        "id": "900057107",
+        "name": "Dennewitzplatz (Berlin)",
+        "location": {
+            "type": "location",
+            "id": "900057107",
+            "latitude": 52.495907,
+            "longitude": 13.366223
+        },
+        "products": {
+            "suburban": false,
+            "subway": false,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:11000:900057107"
+    },
+    {
+        "type": "stop",
+        "id": "900215724",
+        "name": "Pritzwalk, B\u00fcrgerplatz",
+        "location": {
+            "type": "location",
+            "id": "900215724",
+            "latitude": 53.151409,
+            "longitude": 12.173651
+        },
+        "products": {
+            "suburban": false,
+            "subway": false,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:12070:900215724"
+    },
+    {
+        "type": "stop",
+        "id": "900210681",
+        "name": "Dallgow-D\u00f6beritz, Am Reitplatz",
+        "location": {
+            "type": "location",
+            "id": "900210681",
+            "latitude": 52.536835,
+            "longitude": 13.076275
+        },
+        "products": {
+            "suburban": false,
+            "subway": false,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:12063:900210681"
+    },
+    {
+        "type": "stop",
+        "id": "900210648",
+        "name": "Dallgow-D\u00f6beritz, Goetheplatz",
+        "location": {
+            "type": "location",
+            "id": "900210648",
+            "latitude": 52.545878,
+            "longitude": 13.064059
+        },
+        "products": {
+            "suburban": false,
+            "subway": false,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:12063:900210648"
+    },
+    {
+        "type": "stop",
+        "id": "900210705",
+        "name": "Dallgow-D\u00f6beritz, Lindhorstplatz",
+        "location": {
+            "type": "location",
+            "id": "900210705",
+            "latitude": 52.548071,
+            "longitude": 13.072329
+        },
+        "products": {
+            "suburban": false,
+            "subway": false,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:12063:210705"
+    },
+    {
+        "type": "stop",
+        "id": "900055101",
+        "name": "U Viktoria-Luise-Platz (Berlin)",
+        "location": {
+            "type": "location",
+            "id": "900055101",
+            "latitude": 52.496168,
+            "longitude": 13.343264
+        },
+        "products": {
+            "suburban": false,
+            "subway": true,
+            "tram": false,
+            "bus": false,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:11000:900055101"
+    },
+    {
+        "type": "stop",
+        "id": "900029202",
+        "name": "Moritzstr. (Berlin)",
+        "location": {
+            "type": "location",
+            "id": "900029202",
+            "latitude": 52.538606,
+            "longitude": 13.200722
+        },
+        "products": {
+            "suburban": false,
+            "subway": false,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        },
+        "stationDHID": "de:11000:900029202"
+    },
+    {
+        "type": "stop",
+        "id": "974373",
+        "name": "Moritzburger Stra\u00dfe, Radebeul",
+        "location": {
+            "type": "location",
+            "id": "974373",
+            "latitude": 51.108458,
+            "longitude": 13.629211
+        },
+        "products": {
+            "suburban": false,
+            "subway": false,
+            "tram": false,
+            "bus": true,
+            "ferry": false,
+            "express": false,
+            "regional": false
+        }
+    }
+]
