@@ -79,7 +79,7 @@ Before creating any models, open `dbt_project.yml` and configure your folders an
 
 > .yaml = more explicit
 
-> DBT accepts both extensions, so your staging_source.yml is a valid YAML file.
+> DBT accepts both extensions.
 
 </details>
 
