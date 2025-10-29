@@ -75,7 +75,7 @@ models:
 ## 1. Prep Model: Airports
 
 Objective: Reorder columns from staging_airports so that region comes after country. You should explicitly list all columns in your SELECT statement.
-Order of columns: faa, name, city, country, region, lat, lon, alt, tz, dst 
+Order of columns: `faa, name, city, country, region, lat, lon, alt, tz, dst `
 
 #### Task Instructions
 
@@ -92,7 +92,7 @@ FROM {{ ref('staging_airports') }} -- note we do not use the source() any more b
 
 4. `dbt run --select prep_airports`
 
-5. Check your column order in your warehouse table.
+5. Check your column order in your database.
 
 
 <details> 
@@ -265,9 +265,12 @@ Expected Output Columns
 
 - `timestamp::TIME`
 
-- `TO_CHAR(timestamp,'HH24:MI')`
+- `TO_CHAR(timestamp,'HH24:MI')` -- time (hours:minutes) as TEXT data type
 
 - `DATE_PART('week', timestamp)`
+
+- `TO_CHAR(timestamp, 'FMmonth')` AS month_name   -- month name as a TEXT
+
 
 4. Use a CASE WHEN statement for day_part intervals:
 
