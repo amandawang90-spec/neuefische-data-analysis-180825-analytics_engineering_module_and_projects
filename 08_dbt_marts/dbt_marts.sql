@@ -1,23 +1,15 @@
-5.1 Airport Stats
-In a table mart_faa_stats.sql we want to see for each airport over all time:
+--5.1 Airport Stats
+--In a table mart_faa_stats.sql we want to see for each airport over all time:
 
-unique number of departures connections
-
-unique number of arrival connections
-
-how many flight were planned in total (departures & arrivals)
-
-how many flights were canceled in total (departures & arrivals)
-
-how many flights were diverted in total (departures & arrivals)
-
-how many flights actually occured in total (departures & arrivals)
-
-(optional) how many unique airplanes travelled on average
-
-(optional) how many unique airlines were in service on average
-
-add city, country and name of the airport
+--unique number of departures connections
+--unique number of arrival connections
+--how many flight were planned in total (departures & arrivals)
+--how many flights were canceled in total (departures & arrivals)
+--how many flights were diverted in total (departures & arrivals)
+--how many flights actually occured in total (departures & arrivals)
+--(optional) how many unique airplanes travelled on average
+--(optional) how many unique airlines were in service on average
+--add city, country and name of the airport
 
 SELECT *
 FROM flights
@@ -28,21 +20,9 @@ FROM airports
 SELECT *
 FROM prep_flights
 
-
 SELECT *
-FROM prep_flights
-WHERE dep_delay IS NOT NULL 
-ORDER BY dep_delay DESC
-
-
-SELECT 
-    DISTINCT dest,
-    COUNT(*) AS total_unique_arrival_connections
-FROM prep_flights
-GROUP BY dest
-
-
-
+FROM prep_airports 
+--Method 1:
 WITH departures AS ( 
        SELECT 
           origin AS faa,
@@ -164,27 +144,33 @@ USING (faa)
 ORDER BY total_diverted DESC
 
 
-5.2 Flight Route Stats
-In a table mart_route_stats.sql we want to see for each route over all time:
+--5.2 Flight Route Stats
+--In a table mart_route_stats.sql we want to see for each route over all time:
 
-origin airport code
-destination airport code
-total flights on this route
-unique airplanes
-unique airlines
-on average what is the actual elapsed time
-on average what is the delay on arrival
-what was the max delay?
-what was the min delay?
-total number of cancelled
-total number of diverted
-add city, country and name for both, origin and destination, airports
+--origin airport code
+--destination airport code
+--total flights on this route
+--unique airplanes
+--unique airlines
+--on average what is the actual elapsed time
+--on average what is the delay on arrival
+--what was the max delay?
+--what was the min delay?
+--total number of cancelled
+--total number of diverted
+--add city, country and name for both, origin and destination, airports
 
 SELECT *
-FROM prep_airports 
+FROM flights
+
+SELECT *
+FROM airports
 
 SELECT *
 FROM prep_flights
+
+SELECT *
+FROM prep_airports 
 
 
 SELECT 
@@ -205,7 +191,7 @@ SELECT
 FROM prep_flights 
 GROUP BY origin, dest
 
-
+--mart_route_stats
 WITH flights_stats AS (
        SELECT 
           origin,
@@ -258,26 +244,26 @@ SELECT
 FROM add_names
 ORDER BY origin, dest DESC
 
-5.3 Flight Route Stats incl. Weather
-In a table mart_selected_faa_stats_weather.sql we want to see for each airport daily:
+--5.3 Flight Route Stats incl. Weather
+--In a table mart_selected_faa_stats_weather.sql we want to see for each airport daily:
 
-only the airports we collected the weather data for
-unique number of departures connections
-unique number of arrival connections
-how many flight were planned in total (departures & arrivals)
-how many flights were canceled in total (departures & arrivals)
-how many flights were diverted in total (departures & arrivals)
-how many flights actually occured in total (departures & arrivals)
-(optional) how many unique airplanes travelled on average
-(optional) how many unique airlines were in service on average
-(optional) add city, country and name of the airport
-daily min temperature
-daily max temperature
-daily precipitation
-daily snow fall
-daily average wind direction
-daily average wind speed
-daily wnd peakgust
+--only the airports we collected the weather data for
+--unique number of departures connections
+--unique number of arrival connections
+--how many flight were planned in total (departures & arrivals)
+--how many flights were canceled in total (departures & arrivals)
+--how many flights were diverted in total (departures & arrivals)
+--how many flights actually occured in total (departures & arrivals)
+--(optional) how many unique airplanes travelled on average
+--(optional) how many unique airlines were in service on average
+--(optional) add city, country and name of the airport
+--daily min temperature
+--daily max temperature
+--daily precipitation
+--daily snow fall
+--daily average wind direction
+--daily average wind speed
+--daily wind peakgust
 
 
 SELECT *
@@ -370,10 +356,10 @@ JOIN prep_weather_daily AS pwd
   ON an.faa=pwd.airport_code
 ORDER BY an.total_diverted_flights DESC
 
-5.4 Weekly weather
-In a table mart_weather_weekly.sql we want to see all weather stats from the prep_weather_daily model aggregated weekly.
+--5.4 Weekly weather
+--In a table mart_weather_weekly.sql we want to see all weather stats from the prep_weather_daily model aggregated weekly.
 
-consider whether the metric should be Average, Maximum, Minimum, Sum or MODE
+--consider whether the metric should be Average, Maximum, Minimum, Sum or MODE
 
 SELECT *
 FROM prep_weather_daily 
