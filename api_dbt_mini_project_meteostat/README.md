@@ -1,0 +1,1 @@
+# dbt_meteostat_flights_project: analysis of correlation of weather and flights departure and cancellation

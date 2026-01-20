@@ -1,0 +1,1 @@
+# dbt_northwind_trading_project: analysis of sales,customers,orders, products,promotion data.

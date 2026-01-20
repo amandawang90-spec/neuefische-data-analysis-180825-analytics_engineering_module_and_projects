@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: prep_weather_summary
+    description: "Monthly aggregates of average temperature and precipitation per airport."
+    
+  - name: prep_airports
+    description: "Reordered airport table for reporting."
+    columns:
+      - name: faa
+        tests: [not_null, unique]
+      - name: country
+        tests: [not_null]
+
+  - name: prep_weather_daily
+    description: "Daily weather data with derived calendar and seasonal features."
+    columns:
+      - name: date
+        tests: [not_null]
+      - name: season
+        tests:
+          - accepted_values:
+              values: ['winter', 'spring', 'summer', 'autumn']
+
+  - name: prep_weather_hourly
+    description: "Hourly weather data enriched with temporal and categorical features."
+    columns:
+      - name: timestamp
+        tests: [not_null]
+      - name: day_part
+        tests:
+          - accepted_values:
+              values: ['night', 'day', 'evening']
+
+  - name: prep_flights
+    description: "Cleaned flights data with intervals and distance conversions."
+    columns:
+      - name: flight_date
+        tests: [not_null]
+      - name: distance_km
+        tests: [not_null]
+
